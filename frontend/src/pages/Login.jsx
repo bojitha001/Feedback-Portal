@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import styles from "./Login.module.css";
 export default function Login() {
   const navigate = useNavigate();
 
@@ -9,7 +11,6 @@ export default function Login() {
     password: "",
   });
 
-  
   const loginUser = async (userData) => {
     try {
       const response = await axios.post(
@@ -20,7 +21,7 @@ export default function Login() {
       const { user, token } = response.data;
       localStorage.setItem("token", token);
       console.log(user);
-      navigate("/")
+      navigate("/");
     } catch (error) {
       console.error(
         "Feedback submission failed:",
@@ -39,12 +40,20 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.main}>
+      {/* <NavBar/> */}
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.formText}>
+          <p className={styles.formTextTopic}>Create an account</p>
+          <p className={styles.formTextDes}>
+            Please enter your details to create an account
+          </p>
+        </div>
         <label>Email</label>
         <input
           type="text"
           required
+          placeholder="Enter your full name"
           onChange={(event) =>
             setFormData({ ...formData, email: event.target.value })
           }
@@ -53,11 +62,25 @@ export default function Login() {
         <input
           type="text"
           required
+          placeholder="Enter your email"
           onChange={(event) =>
             setFormData({ ...formData, password: event.target.value })
           }
         />
-        <button type="submit">Submit</button>
+        <button className={styles.button} type="submit">
+          Submit
+        </button>
+        <div className={styles.toSignUp}>
+          <p>
+            Don't have an account?{" "}
+            <span
+              onClick={() => navigate("/signup")}
+              style={{ color: "#1b1b1b", cursor: "pointer", textDecoration: "underline"}}
+            >
+              Sign up
+            </span>
+          </p>
+        </div>
       </form>
     </div>
   );
