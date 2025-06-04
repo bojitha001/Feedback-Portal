@@ -47,7 +47,7 @@ router.post("/signup", async (req, res) => {
       user,
       token,
     });
-    console.log(user, token)
+    console.log(user, token);
   } catch (error) {
     console.log("Register error", error);
     res.status(400).send("User not created");
@@ -58,6 +58,40 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   // TODO: Handle login (check user, compare password, return JWT)
   const { email, password } = req.body;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+    });
+
+    if (!user) {
+      return res.status(401).json({
+        error: "Invalid email",
+      });
+    }
+
+    const isValidpassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidpassword) {
+      return res.status(401).json({
+        error: "Invalid password",
+      });
+    }
+
+    const token = createToken(user.id, user.email, user.isAdmin);
+    res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
+      token,
+    });
+
+    console.log(user, token);
+  } catch (error) {
+    console.log("Login error", error);
+    res.status(400).send("User not found");
+  }
 });
 
 module.exports = router;
