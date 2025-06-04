@@ -7,9 +7,32 @@ const prisma = new PrismaClient();
 // GET /feedback
 router.get("/", async (req, res) => {
   // TODO: Return feedback for logged in user
-  res
-    .status(501)
-    .json({ message: "Not implemented. Implement get feedback logic." });
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const feedbacks = await prisma.feedback.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        message: true,
+        createdAt: true,
+      },
+    });
+    return res.status(200).json({
+      success: true,
+      feedbacks,
+      count: feedbacks.length,
+    });
+  } catch (error) {
+    console.error("Error fetching feedback:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 // POST /feedback
