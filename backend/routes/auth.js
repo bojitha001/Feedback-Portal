@@ -25,6 +25,16 @@ router.post("/signup", async (req, res) => {
   // TODO: Handle signup (create user, hash password, return JWT)
   const { email, password, isAdmin } = req.body;
   try {
+    const checkExisitingUser = await prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+    });
+
+    if (checkExisitingUser) {
+      return res.status(400).json({
+        error: "User with this email already exists",
+      });
+    }
+
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
