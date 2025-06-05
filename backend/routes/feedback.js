@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const adminMiddelware = require("../middleware/admin");
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
@@ -64,6 +65,47 @@ router.post("/", async (req, res) => {
     return res.status(201).json({ success: true, feedback });
   } catch (error) {
     console.error("Error creating feedback:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// DELETE /feedback
+router.delete("/",adminMiddelware, async (req, res) => {
+  //TODO: Delete a feedBack
+  const userId = req.user?.id;
+  const feedbackId = parseInt(req.body.id, 10); // Get ID from request body
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  if (isNaN(feedbackId)) {
+    return res.status(400).json({ error: "Invalid feedback ID" });
+  }
+
+  try {
+    // Find the feedback
+    const feedback = await prisma.feedback.findUnique({
+      where: { id: feedbackId },
+    });
+
+    if (!feedback) {
+      return res.status(404).json({ error: "Feedback not found" });
+    }
+
+    // Ensure it belongs to the logged-in user
+    if (feedback.userId !== userId) {
+      return res.status(403).json({ error: "Forbidden: Not your feedback" });
+    }
+
+    // Delete it
+    await prisma.feedback.delete({
+      where: { id: feedbackId },
+    });
+
+    return res.status(200).json({ success: true, message: "Feedback deleted" });
+  } catch (error) {
+    console.error("Error deleting feedback:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
