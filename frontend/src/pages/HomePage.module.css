@@ -1,0 +1,25 @@
+.container {
+    background-color: black;
+    height: 100vh;
+    color: aliceblue;
+
+}
+
+.textBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    width: 120rem;
+    margin: 0 auto;
+}
+
+.mainTopic {
+    font-size: 6rem;
+    font-weight: 600;
+}
+
+.subTopic {
+    font-size: 1.875rem;
+}
