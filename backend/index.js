@@ -5,6 +5,7 @@ const authRoutes = require('./routes/auth');
 const feedbackRoutes = require('./routes/feedback');
 const authMiddleware = require('./middleware/auth');
 const adminRoutes = require('./routes/admin');
+const userRoute = require('./routes/user')
 const prisma = new PrismaClient();
 const app = express();
 const dotenv = require('dotenv');
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/feedback', authMiddleware, feedbackRoutes);
 app.use('/admin', authMiddleware, adminRoutes);
+app.use('/user', authMiddleware, userRoute)
 
 app.listen(3001, () => {
   console.log('Server running on http://localhost:3001');
