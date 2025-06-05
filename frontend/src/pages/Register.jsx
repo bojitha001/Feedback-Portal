@@ -74,7 +74,7 @@ export default function Register() {
         </button>
         <div className={styles.toSignUp}>
           <p className={styles.toSignUp}>
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <span
               onClick={() => navigate("/login")}
               style={{
