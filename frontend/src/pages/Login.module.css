@@ -93,3 +93,10 @@
     font-size: 1.25rem;
     color: #7b7b7b;
 }
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: -1rem;
+}
