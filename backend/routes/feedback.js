@@ -93,11 +93,6 @@ router.delete("/",adminMiddelware, async (req, res) => {
       return res.status(404).json({ error: "Feedback not found" });
     }
 
-    // Ensure it belongs to the logged-in user
-    if (feedback.userId !== userId) {
-      return res.status(403).json({ error: "Forbidden: Not your feedback" });
-    }
-
     // Delete it
     await prisma.feedback.delete({
       where: { id: feedbackId },
