@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import styles from "./Login.module.css";
 
 export default function Register() {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
 
   const addUser = async (userData) => {
     try {
@@ -24,10 +26,10 @@ export default function Register() {
       console.log(user);
       navigate("/");
     } catch (error) {
-      console.error(
-        "Feedback submission failed:",
-        error.response?.data || error.message
-      );
+      const errorMessage =
+        error.response?.data?.error || error.message || "Something went wrong";
+      setError(errorMessage);
+      console.error("Signup failed:", errorMessage);
     }
   };
 
@@ -41,25 +43,50 @@ export default function Register() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.main}>
+      {/* <NavBar/> */}
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.formText}>
+          <p className={styles.formTextTopic}>Create an account</p>
+          <p className={styles.formTextDes}>
+            Please enter your details to create an account
+          </p>
+        </div>
         <label>Email</label>
         <input
-          type="text"
+          type="email"
           required
           onChange={(event) =>
             setFormData({ ...formData, email: event.target.value })
           }
         />
+        <p>{error && <p className={styles.error}>{error}</p>}</p>
         <label>Password</label>
         <input
-          type="text"
+          type="password"
           required
           onChange={(event) =>
             setFormData({ ...formData, password: event.target.value })
           }
         />
-        <button type="submit">Submit</button>
+        <button className={styles.button} type="submit">
+          Submit
+        </button>
+        <div className={styles.toSignUp}>
+          <p className={styles.toSignUp}>
+            Don't have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              style={{
+                color: "#1b1b1b",
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+            >
+              Log In
+            </span>
+          </p>
+        </div>
       </form>
     </div>
   );

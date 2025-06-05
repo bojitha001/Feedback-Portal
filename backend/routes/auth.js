@@ -75,7 +75,7 @@ router.post("/login", async (req, res) => {
 
     if (!user) {
       return res.status(401).json({
-        error: "Invalid email",
+        error: "Invalid email or Password",
       });
     }
 
@@ -83,7 +83,7 @@ router.post("/login", async (req, res) => {
 
     if (!isValidpassword) {
       return res.status(401).json({
-        error: "Invalid password",
+        error: "Invalid password or password",
       });
     }
 
