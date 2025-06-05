@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import NavBar from '../components/NavBar';
+import styles from "./FeedBack.module.css"
 export default function MyFeedback() {
   const [feedbacks, setFeedbacks] = useState([])
 
@@ -25,8 +26,17 @@ export default function MyFeedback() {
 
   return <div>
     <NavBar/>
-    {feedbacks.map((feedback) => (
-      <p key={feedback.id}>{feedback.message}</p>
-    ))}
+    <div className={styles.container}>
+      <div className={styles.feedBackContainer}>
+      <h2 className={styles.title}>My Feedbacks</h2>
+      <div className={styles.feedbackList}>
+        {feedbacks.map((feedback) => (
+          <div key={feedback.id} className={styles.feedbackItem}>
+            <p>{feedback.message}</p>
+          </div>
+        ))}
+      </div>
+      </div>
+    </div>
   </div>;
 } 
