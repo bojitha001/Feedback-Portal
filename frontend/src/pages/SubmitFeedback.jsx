@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import NavBar from "../components/NavBar";
 import axios from "axios";
+import styles from "./SubmitFeedback.module.css";
 export default function SubmitFeedback() {
   const [formData, setFormData] = useState({
     message: "",
@@ -33,21 +34,33 @@ export default function SubmitFeedback() {
     addFeeddBack({
       message: formData.message,
     });
+    setFormData({...formData,message:""})
   };
 
   return (
-    <div>
+    <>
       <NavBar />
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="">FeedBack</label>
-        <input
-          type="text"
-          onChange={(event) =>
-            setFormData({ ...formData, message: event.target.value })
-          }
-        />
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+      <div className={styles.container}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <label htmlFor="feedback" className={styles.label}>
+            Submit your Feedback
+          </label>
+          <input
+            id="feedback"
+            type="text"
+            className={styles.input}
+            value={formData.message}
+            onChange={(event) =>
+              setFormData({ ...formData, message: event.target.value })
+            }
+            placeholder="Type your feedback here..."
+            required
+          />
+          <button type="submit" className={styles.button}>
+            Submit
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
